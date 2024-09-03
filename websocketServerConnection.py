@@ -16,9 +16,10 @@ async def receive_data(uri):
                 # Receive data from the server
                 message = await websocket.recv()
                 
-                log_management.writeAfterWebsocket(message)
+                
                 print("received Message",message)
                 dataToPublish(message)
+
                 # Ensure that message is a JSON string and parse it
 
         except websockets.ConnectionClosed:
@@ -33,6 +34,11 @@ def dataToPublish(message):
             data_to_send = [parsed_message]
             json_msg = json.dumps(data_to_send)
             timestamp = parsed_message['timeStamp']
+           # print(timestamp)
+            dt = datetime.datetime.fromtimestamp(timestamp)
+            print(dt.strftime('%Y-%m-%d %H:%M:%S.%f'))
+            log_management.writeBeforeWebsocket(f'{dt}{message}')
+            log_management.writeAfterWebsocket(message)
             # Publish the JSON string to the ROS topic
             log_management.writeBeforeRos(json_msg)
             pub.publish(json_msg)
