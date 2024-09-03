@@ -8,7 +8,7 @@ from typing import Callable, Union, List
 from easyhid import Enumeration, HIDException
 import datetime
 import json
-from saveDataDetails import log_management
+
 # Define named tuples for structured data
 AxisSpec = namedtuple("AxisSpec", ["channel", "byte1", "byte2", "scale"])
 ButtonSpec = namedtuple("ButtonSpec", ["channel", "byte", "bit"])
@@ -143,7 +143,7 @@ async def sendSpacemouseData(uri):
                         'button1': int(state.buttons[1]),
                         'timeStamp': timeStamp.timestamp()  # Convert datetime to Unix timestamp
                     }
-                    log_management.writeBeforeWebsocket(data)
+                    
                     # Add a small delay to avoid flooding the console
                     if (current_time - last_send_time >= 1.0):
                         await websocket.send(json.dumps(data))
