@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <include file="$(find dsr_control)/launch/dsr_moveit.launch" />
+  <node name="websocket_Receiver" pkg="dsr_example_py" type="websocketServerConnection.py" output="screen"/>
+  <node name="spacemouseControl" pkg="dsr_example_py" type="spaceMouseControl.py" output="screen"/>
+</launch>
