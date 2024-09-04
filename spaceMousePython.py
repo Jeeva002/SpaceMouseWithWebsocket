@@ -13,7 +13,6 @@ import json
 AxisSpec = namedtuple("AxisSpec", ["channel", "byte1", "byte2", "scale"])
 ButtonSpec = namedtuple("ButtonSpec", ["channel", "byte", "bit"])
 SpaceNavigator = namedtuple("SpaceNavigator", ["t", "x", "y", "z", "roll", "pitch", "yaw", "buttons"])
-
 class ButtonState(list):
     def __int__(self):
         # Convert button state list to integer (bitwise operations)
