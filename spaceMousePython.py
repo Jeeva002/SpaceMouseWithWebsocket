@@ -131,6 +131,7 @@ async def sendSpacemouseData(uri):
                 if state:
                     # Prepare the data to be sent
                     print_state(state)
+                    timeStampConverted=timeStamp.timestamp()
                     data = {
                         'x': float("%.2f" % getattr(state, 'x')),
                         'y': float("%.2f" % getattr(state, 'y')),
@@ -140,7 +141,7 @@ async def sendSpacemouseData(uri):
                         'yaw': float("%.2f" % getattr(state, 'yaw')),
                         'button0': int(state.buttons[0]),
                         'button1': int(state.buttons[1]),
-                        'timeStamp': timeStamp.timestamp()  # Convert datetime to Unix timestamp
+                        'timeStamp': float(timeStampConverted)   # Convert datetime to Unix timestamp
                     }
                     
                     # Add a small delay to avoid flooding the console
