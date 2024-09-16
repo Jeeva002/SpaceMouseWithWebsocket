@@ -17,12 +17,16 @@ class LogManagement:
         milliseconds = now.microsecond // 1000  # Convert microseconds to milliseconds
         self.file.write(f'{timestamp}.{milliseconds:03d} - {level} - {msg}\n')
         self.file.flush()  # Ensure the message is written to disk
-
+        
+    def _write_log_before_websocket(self, timeStamp, level, msg):
+       # Convert microseconds to milliseconds
+        self.file.write(f'{timeStamp} - {level} - {msg}\n')
+        self.file.flush() 
     def writeRawData(self, msg):
         self._write_log('rawData', msg)
 
-    def writeBeforeWebsocket(self, msg):
-        self._write_log('BeforeWebsocket', msg)
+    def writeBeforeWebsocket(self,timeStamp, msg):
+        self._write_log('BeforeWebsocket',timeStamp, msg)
 
     def writeAfterWebsocket(self, msg):
         self._write_log('AfterWebsocket', msg)
