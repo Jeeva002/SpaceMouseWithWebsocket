@@ -35,7 +35,7 @@ def dataToPublish(message):
             json_msg = json.dumps(data_to_send)
             timestamp = parsed_message['timeStamp']
            # print(timestamp)
-            log_management.writeBeforeWebsocket(f'{timestamp}{message}')
+            log_management.writeBeforeWebsocket(timestamp,message)
             log_management.writeAfterWebsocket(message)
             # Publish the JSON string to the ROS topic
             log_management.writeBeforeRos(json_msg)
