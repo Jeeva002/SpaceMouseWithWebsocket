@@ -26,7 +26,7 @@ class LogManagement:
         self._write_log('rawData', msg)
 
     def writeBeforeWebsocket(self,timeStamp, msg):
-        self._write_log('BeforeWebsocket',timeStamp, msg)
+        self._write_log_before_websocket('BeforeWebsocket',timeStamp, msg)
 
     def writeAfterWebsocket(self, msg):
         self._write_log('AfterWebsocket', msg)
