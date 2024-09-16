@@ -127,11 +127,10 @@ async def sendSpacemouseData(uri):
             while True:
                 state = dev.read()
                 current_time = time.time()
-                timeStamp = datetime.datetime.now()
+                timeStamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
                 if state:
                     # Prepare the data to be sent
                     print_state(state)
-                    timeStampConverted=timeStamp.timestamp()
                     data = {
                         'x': float("%.2f" % getattr(state, 'x')),
                         'y': float("%.2f" % getattr(state, 'y')),
@@ -141,9 +140,9 @@ async def sendSpacemouseData(uri):
                         'yaw': float("%.2f" % getattr(state, 'yaw')),
                         'button0': int(state.buttons[0]),
                         'button1': int(state.buttons[1]),
-                        'timeStamp': float(timeStampConverted)   # Convert datetime to Unix timestamp
+                        'timeStamp': timeStamp  # Convert datetime to Unix timestamp
                     }
-                    
+                    await asyncio.sleep(0.00001)
                     # Add a small delay to avoid flooding the console
                     if (current_time - last_send_time >= 1.0):
                         await websocket.send(json.dumps(data))
@@ -160,4 +159,3 @@ if __name__ == "__main__":
     # Entry point for the script, run the asynchronous function
     websocket_uri = "wss://websocket.atrehealthtech.com/royal/test"
     asyncio.run(sendSpacemouseData(websocket_uri))
-
