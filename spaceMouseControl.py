@@ -8,6 +8,7 @@ def launchSpaceMouse():
     """
     Function to launch the main function from spaceMouse6AxisControl module.
     """
+    
     main()  # Call the main function from spaceMouse6AxisControl module
 
 if __name__ == "__main__":

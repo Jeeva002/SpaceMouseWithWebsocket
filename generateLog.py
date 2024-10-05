@@ -13,7 +13,7 @@ class logManagement():
             self.logger.setLevel(logging.DEBUG)
 
             # Create a handler for writing log messages to a file
-            file_handler = logging.FileHandler('/home/atre/spacemouseTeleoperation/src/doosan-robot/dsr_example/py/scripts/spaceMouse/test.log')  # Change the filename as needed
+            file_handler = logging.FileHandler('/home/amritha/teleop_ws/src/Telerobot_control/doosan-robot/dsr_example/py/scripts/SpaceMouseWithWebsocket/test.log')  # Change the filename as needed
             file_handler.setLevel(logging.DEBUG)
 
             # Create a formatter

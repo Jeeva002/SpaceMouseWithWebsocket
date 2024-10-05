@@ -39,6 +39,7 @@ from generateLog import logFile
 from scipy.spatial.transform import Rotation as R
 # Import numerical operations library
 import numpy as np
+from logs import logFile
 
 # Define class spacemouse
 class spacemouse():
@@ -55,6 +56,8 @@ class spacemouse():
         self.only_once_flag = False
         self.posFlag = True
         self.permissionFlag = True
+        # self.positionFile=open("/home/amritha/teleop_ws/src/Telerobot_control/doosan-robot/dsr_example/py/scripts/SpaceMouseWithWebsocket/SpaceMousePositions.txt", "a")                        
+
         # Variables for storing rotational angles (roll, pitch, yaw)
         self.roll = 0
         self.yaw = 0
@@ -110,7 +113,7 @@ class spacemouse():
     def callback(self, data):
         # Callback function for processing spacemouse data
         global count
-        
+        print("call backed")
         try:
             # Parse the JSON string
             json_data_list = json.loads(data.data)
@@ -140,6 +143,10 @@ class spacemouse():
                 rospy.logwarn("Expected a non-empty list but received a different type")
         except json.JSONDecodeError as e:
             rospy.logerr(f"Failed to decode JSON: {e}")
+
+        logFile.writeInfo('spacemouse data received')
+       # self.positionFile.write(f'\n {datetime.datetime.now()} spaceMouse Received:{data.data} ')
+    
         try:
             if data["x"] != 0 or data["y"] != 0 or data["z"] != 0 and self.permissionFlag == True:
                 # Collect current robot position if flag is True
@@ -241,6 +248,8 @@ class spacemouse():
                 print("else")
                 self.only_once_flag = False
                 jog_multi([0, 0, 0, 0, 0, 0], MOVE_REFERENCE_BASE, 0)
+                logFile.writeInfo('robot stopped moving')
+
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -252,13 +261,14 @@ class spacemouse():
         MY_flag = False
 
         if state == 10 or state == 3 or state == 8:
+            logFile.writeError('servo turned off')
             MY_flag = True
             if MY_flag == True:
-                file1 = open("/home/atre/spacemouseTeleoperation/src/doosan-robot/dsr_example/py/scripts/spaceMouse/safeoffErrorEvaluation.txt", "a")
+                # file1 = open("/home/atre/spacemouseTeleoperation/src/doosan-robot/dsr_example/py/scripts/spaceMouse/safeoffErrorEvaluation.txt", "a")
                 error = get_last_alarm()
                 pos = get_current_posx()
-                file1.write(f'\n {datetime.datetime.now()} Targetpos:{data.data},vel:40,acc=40 \n {datetime.datetime.now()} currentpos:{pos[0]}')
-                file1.close()
+                # file1.write(f'\n {datetime.datetime.now()} Targetpos:{data.data},vel:40,acc=40 \n {datetime.datetime.now()} currentpos:{pos[0]}')
+                # file1.close()
                 set_robot_control(CONTROL_RESET_SAFET_OFF)
                 time.sleep(2)
                 MY_flag = False
@@ -286,7 +296,7 @@ connexion3d = spacemouse()
 
 def listener():
     # ROS listener function
-    
+    print("listener inside")
     rospy.init_node('spaceMouse')
     rospy.Subscriber("spacemouseValues", String, connexion3d.callback)
     rospy.Subscriber("pos", Float64MultiArray, connexion3d.errorLog)

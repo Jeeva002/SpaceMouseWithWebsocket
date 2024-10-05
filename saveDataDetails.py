@@ -13,16 +13,24 @@ class LogManagement:
 
     def _write_log(self, level, msg):
         now = datetime.datetime.now()
-        timestamp = now.strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = now.strftime('%Y-%m-%d - %H:%M:%S')
         milliseconds = now.microsecond // 1000  # Convert microseconds to milliseconds
         self.file.write(f'{timestamp}.{milliseconds:03d} - {level} - {msg}\n')
         self.file.flush()  # Ensure the message is written to disk
+        
+    def _write_log_before_websocket(self, msgtimeStamp, level, msg):
+       # Convert microseconds to milliseconds
+        now = datetime.datetime.now()
+        current_timestamp = now.strftime('%Y-%m-%d - %H:%M:%S')
+        milliseconds = now.microsecond // 1000 
+        self.file.write(f'{current_timestamp}.{milliseconds:03d} - {msgtimeStamp} - {level} - {msg}\n')
+        self.file.flush() 
 
     def writeRawData(self, msg):
         self._write_log('rawData', msg)
 
-    def writeBeforeWebsocket(self, msg):
-        self._write_log('BeforeWebsocket', msg)
+    def writeBeforeWebsocket(self,timeStamp, msg):
+        self._write_log_before_websocket('BeforeWebsocket',timeStamp, msg)
 
     def writeAfterWebsocket(self, msg):
         self._write_log('AfterWebsocket', msg)
@@ -34,7 +42,15 @@ class LogManagement:
         self._write_log('AfterRos', msg)
 
     def robotTime(self, msg):
-        self._write_log('robotExecution', msg)
+        self._write_log('RobotExecution', msg)
+    def feedbackGeneratedfromros(self,msg):
+        self._write_log('FeedbackGeneratedfromRos',msg)    
+
+    def feedbackBeforeWebsocket(self,msg):
+        self._write_log('FeedbackBeforeWebsocket',msg)    
+
+    def feedbackAfterWebsocket(self,msg):
+        self._write_log('FeedbackAfterWebsocket',msg)  
 
     def close(self):
         # Close the file when done
